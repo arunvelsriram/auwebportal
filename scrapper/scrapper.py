@@ -1,4 +1,5 @@
-import requests, json
+import requests
+import json
 from bs4 import BeautifulSoup
 
 
@@ -230,13 +231,13 @@ class Scrapper():
 
                 exam_result_details = self.get_exam_result_details(Scrapper.EXAM_RESULTS)
                 # print 'Result\n{0}'.format(exam_result_details)
-                exam_reval_result_details = scrapper.get_exam_reval_result_details()
+                exam_reval_result_details = self.get_exam_reval_result_details()
                 # print 'Reval result\n{0}'.format(exam_reval_result_details)
 
-                elective_details = scrapper.get_elective_details(Scrapper.ELECTIVES)
+                elective_details = self.get_elective_details(Scrapper.ELECTIVES)
                 # print 'Electives\n{0}'.format(elective_details)
 
-                internal_mark_details = scrapper.get_internal_mark_details(Scrapper.INTERNAL_MARK)
+                internal_mark_details = self.get_internal_mark_details(Scrapper.INTERNAL_MARK)
                 # print 'Internal marks\n{0}'.format(internal_mark_details)
 
                 json_string = json.dumps({
