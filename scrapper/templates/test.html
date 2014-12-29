@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Test Endpoint</h2>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }} </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <form action="" method="get" name="input_form">
+        {{ form.hidden_tag() }}
+        <p>
+            Register No. :<br />
+            {{ form.register_no(size=30) }}
+            {% for error in form.register_no.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+        </p>
+        <p>
+            Date Of Birth :<br/>
+            {{ form.dob(size=30, class='datepicker') }}
+            {% for error in form.dob.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+        </p>
+        <p>
+            <input type="submit" value="Fetch">
+        </p>
+        </form>
+{% endblock %}
