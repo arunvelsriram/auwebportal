@@ -17,10 +17,14 @@ class Scrapper():
         self.register_no = register_no
         self.dob = dob
         self.cookies = None
+        self.proxies = {
+            'http': '',
+            'https': '',
+        }
         self.current_page = None
 
     def login(self):
-        home = requests.get(Scrapper.LOGIN_URL)
+        home = requests.get(Scrapper.LOGIN_URL, proxies=self.proxies)
         self.cookies = home.cookies
 
         soup = BeautifulSoup(home.content)
@@ -38,7 +42,7 @@ class Scrapper():
         return post_data
 
     def get_profile_details(self, post_data):
-        self.current_page = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies)
+        self.current_page = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies, proxies=self.proxies)
         if self.current_page.content.find("window.location='index.php'") == -1:
             soup = BeautifulSoup(self.current_page.content)
             table = soup.findAll('table')[0]
@@ -56,7 +60,7 @@ class Scrapper():
         for inp in form.findAll('input'):
             post_data.update({inp['name']: inp['value']})
 
-        profile_exam_schedule = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies)
+        profile_exam_schedule = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies, proxies=self.proxies)
         self.current_page = profile_exam_schedule
 
         soup = BeautifulSoup(profile_exam_schedule.content)
@@ -80,7 +84,7 @@ class Scrapper():
         for inp in form.findAll('input'):
             post_data.update({inp['name']: inp['value']})
 
-        profile_assessment_details = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies)
+        profile_assessment_details = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies, proxies=self.proxies)
         self.current_page = profile_assessment_details
 
         soup = BeautifulSoup(profile_assessment_details.content)
@@ -122,7 +126,7 @@ class Scrapper():
         for inp in form.findAll('input'):
             post_data.update({inp['name']: inp['value']})
 
-        profile_exam_result = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies)
+        profile_exam_result = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies, proxies=self.proxies)
         self.current_page = profile_exam_result
 
         if profile_exam_result.content.find('No Record Found') == -1:
@@ -175,7 +179,7 @@ class Scrapper():
         for inp in form.findAll('input'):
             post_data.update({inp['name']: inp['value']})
 
-        profile_elective = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies)
+        profile_elective = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies, proxies=self.proxies)
         self.current_page = profile_elective
 
         if profile_elective.content.find('No Data or Elective Found') == -1:
@@ -196,7 +200,7 @@ class Scrapper():
         for inp in form.findAll('input'):
             post_data.update({inp['name']: inp['value']})
 
-        profile_internal_mark = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies)
+        profile_internal_mark = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies, proxies=self.proxies)
         self.current_page = profile_internal_mark
 
         soup = BeautifulSoup(profile_internal_mark.content)
