@@ -31,7 +31,7 @@ except IOError:
 #  main():
 #
 if __name__ == '__main__':
-  application = imp.load_source('app', 'scrapper')
+  application = imp.load_source('app', 'auwebportal/__init__.py')
   port = application.app.config['PORT']
   ip = application.app.config['IP']
   app_name = application.app.config['APP_NAME']

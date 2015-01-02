@@ -1,8 +1,8 @@
-from . import app
-from flask import render_template, flash, request, make_response
+from auwebportal import app
+from flask import render_template, request, make_response
 from forms import InputForm
 import datetime
-from .scrapper import Scrapper
+from scrapper import Scrapper
 import requests
 import json
 

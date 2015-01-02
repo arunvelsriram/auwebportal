@@ -1,5 +1,4 @@
 import os
-
 DEBUG = True
 PROPAGATE_EXCEPTIONS = True
 WTF_CSRF_ENABLED = True
