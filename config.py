@@ -1,2 +1,2 @@
 WTF_CSRF_ENABLED = True
-SECRET_KEY = 's3cr3t'
+SECRET_KEY = 'MyS3Cr3t'
