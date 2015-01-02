@@ -6,5 +6,5 @@ setup(name='auwebportal',
       author='Arunvel Sriram',
       author_email='arunvelsriram@gmail.com',
       url='http://www.python.org/sigs/distutils-sig/',
-      install_requires=['Flask>=0.10.1', 'wtforms'],
+      install_requires=['Flask>=0.10.1', 'wtforms', 'flask-wtf'],
      )
