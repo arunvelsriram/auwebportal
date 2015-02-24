@@ -1,7 +1,7 @@
 #AU Web Portal API
 A Python API using Flask microframework, to retrieve student details from Anna University web portal in JSON fromat.
 
-##Test he API
+##Test the API
 The project is hosted in the [OpenShift](http://openshift.com/) cloud platform.
 [Test the API](http://auwebportal-savsr.rhcloud.com/)
 
