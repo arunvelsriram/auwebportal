@@ -385,3 +385,7 @@ http://auwebportal-savsr.rhcloud.com/get/?register_no=rno&dob=dob
 
 ### Contact
 Email : arunvelsriram@gmail.com
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/arunvelsriram/auwebportal/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
