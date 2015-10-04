@@ -1,6 +1,8 @@
 import requests
 import json
+import re
 from bs4 import BeautifulSoup
+from IPython import embed
 
 
 class Scrapper():
@@ -27,24 +29,27 @@ class Scrapper():
         home = requests.get(Scrapper.LOGIN_URL, proxies=self.proxies)
         self.cookies = home.cookies
 
-        soup = BeautifulSoup(home.content)
+        soup = BeautifulSoup(home.content, 'html.parser')
         captcha = str(soup.findAll('label', attrs={'class': 'login'})[-1].getText())
-        captcha = str(eval(captcha[captcha.index('('):captcha.index(')')+1:]))
+        captcha = re.search(r'\d+ (?:\-|\+) \d+', captcha, re.M|re.I).group()
+        solution = str(eval(captcha))
         hidden_field = soup.findAll('input', attrs={'type': 'hidden'})[-1]
         post_data = {
             hidden_field.attrs['name']: hidden_field.attrs['value'],
             'register_no': self.register_no,
             'dob': self.dob,
-            'security_code_student': captcha,
+            'security_code_student': solution,
             'gos': 'Login',
         }
 
         return post_data
 
     def get_profile_details(self, post_data):
-        self.current_page = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies, proxies=self.proxies)
+    	headers = {'Content-type': 'application/x-www-form-urlencoded', 'Origin': 'http://coe1.annauniv.edu'}
+        self.current_page = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies, proxies=self.proxies, headers=headers)
+
         if self.current_page.content.find("window.location='index.php'") == -1:
-            soup = BeautifulSoup(self.current_page.content)
+            soup = BeautifulSoup(self.current_page.content, 'html.parser')
             table = soup.findAll('table')[0]
             profile_details = {}
             for row in table.findAll('tr'):
@@ -54,7 +59,7 @@ class Scrapper():
             return None
 
     def get_exam_schedule_details(self, tab_id):
-        soup = BeautifulSoup(self.current_page.content)
+        soup = BeautifulSoup(self.current_page.content, 'html.parser')
         form = soup.find('form', attrs={'id': tab_id})
         post_data = {}
         for inp in form.findAll('input'):
@@ -63,7 +68,7 @@ class Scrapper():
         profile_exam_schedule = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies, proxies=self.proxies)
         self.current_page = profile_exam_schedule
 
-        soup = BeautifulSoup(profile_exam_schedule.content)
+        soup = BeautifulSoup(profile_exam_schedule.content, 'html.parser')
         schedule = soup.findAll('table')[1]
         schedule_fields = schedule.findAll('tr')[0].findAll('th')
         exam_schedule_details = []
@@ -78,7 +83,7 @@ class Scrapper():
         return exam_schedule_details
 
     def get_assessment_details(self, tab_id):
-        soup = BeautifulSoup(self.current_page.content)
+        soup = BeautifulSoup(self.current_page.content, 'html.parser')
         form = soup.find('form', attrs={'id': tab_id})
         post_data = {}
         for inp in form.findAll('input'):
@@ -87,7 +92,7 @@ class Scrapper():
         profile_assessment_details = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies, proxies=self.proxies)
         self.current_page = profile_assessment_details
 
-        soup = BeautifulSoup(profile_assessment_details.content)
+        soup = BeautifulSoup(profile_assessment_details.content, 'html.parser')
         table = soup.findAll('table')[1]
         rows = table.findAll('tr')
         assesment_detail = []
@@ -120,7 +125,7 @@ class Scrapper():
         return assesment_detail
 
     def get_exam_result_details(self, tab_id):
-        soup = BeautifulSoup(self.current_page.content)
+        soup = BeautifulSoup(self.current_page.content, 'html.parser')
         form = soup.find('form', attrs={'id': tab_id})
         post_data = {}
         for inp in form.findAll('input'):
@@ -130,7 +135,7 @@ class Scrapper():
         self.current_page = profile_exam_result
 
         if profile_exam_result.content.find('No Record Found') == -1:
-            soup = BeautifulSoup(profile_exam_result.content)
+            soup = BeautifulSoup(profile_exam_result.content, 'html.parser')
             details = []
             table = soup.findAll('table')[1]
             rows = table.findAll('tr')[4:]
@@ -152,7 +157,7 @@ class Scrapper():
 
     def get_exam_reval_result_details(self):
         if self.current_page.content.find('Revaluation / Photocopy Result') != -1:
-            soup = BeautifulSoup(self.current_page.content)
+            soup = BeautifulSoup(self.current_page.content, 'html.parser')
             table = soup.findAll('table')[3]
             rows = table.findAll('tr')
             fields = rows[0].findAll('th')
@@ -173,7 +178,7 @@ class Scrapper():
             return None
 
     def get_elective_details(self, tab_id):
-        soup = BeautifulSoup(self.current_page.content)
+        soup = BeautifulSoup(self.current_page.content, 'html.parser')
         form = soup.find('form', attrs={'id': tab_id})
         post_data = {}
         for inp in form.findAll('input'):
@@ -183,7 +188,7 @@ class Scrapper():
         self.current_page = profile_elective
 
         if profile_elective.content.find('No Data or Elective Found') == -1:
-            soup = BeautifulSoup(profile_elective.content)
+            soup = BeautifulSoup(profile_elective.content, 'html.parser')
             table = soup.findAll('table')[1]
             elective_details = []
             for row in table.findAll('tr')[1:]:
@@ -194,7 +199,7 @@ class Scrapper():
             return None
 
     def get_internal_mark_details(self, tab_id):
-        soup = BeautifulSoup(self.current_page.content)
+        soup = BeautifulSoup(self.current_page.content, 'html.parser')
         form = soup.find('form', attrs={'id': tab_id})
         post_data = {}
         for inp in form.findAll('input'):
@@ -203,7 +208,7 @@ class Scrapper():
         profile_internal_mark = requests.post(Scrapper.PROFILE_URL, data=post_data, cookies=self.cookies, proxies=self.proxies)
         self.current_page = profile_internal_mark
 
-        soup = BeautifulSoup(profile_internal_mark.content)
+        soup = BeautifulSoup(profile_internal_mark.content, 'html.parser')
         table = soup.findAll('table')[1]
         rows = table.findAll('tr')
         fields = rows[0].findAll('th')
@@ -235,6 +240,7 @@ class Scrapper():
 
                 exam_result_details = self.get_exam_result_details(Scrapper.EXAM_RESULTS)
                 # print 'Result\n{0}'.format(exam_result_details)
+                
                 exam_reval_result_details = self.get_exam_reval_result_details()
                 # print 'Reval result\n{0}'.format(exam_reval_result_details)
 
@@ -271,6 +277,6 @@ class Scrapper():
         return json_string
 
 if __name__ == '__main__':
-    scrapper = Scrapper('your-register-number', 'your-dob')
+    scrapper = Scrapper('your-register-number', 'date-of-birth')
     json_string = scrapper.get_json()
     print "Full JSON\n{0}".format(json_string)
