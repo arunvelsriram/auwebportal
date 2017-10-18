@@ -1,28 +1,24 @@
 # AU Web Portal API
 A Python API using Flask microframework, to retrieve student details from Anna University web portal in JSON fromat.
 
-## Environment Setup  
-`$ brew install pip`  
-`$ pip install virtualenv`  
+## Setup
 
-`$ mkdir -p ~/Virtualenvs`  
-`$ cd ~/Virtualenvs/`  
-`$ virtualenv bin/activate`  
-`$ pip install requests beautifulsoup4 flask flask-wtf wtforms ipython`  
-
-`$ cd path/to/auwebportal`  
-`$ python wsgi.py`
-
-## Test the API  
-The project is hosted in the [OpenShift](http://openshift.com/) cloud platform.
-[Test the API](http://auwebportal-savsr.rhcloud.com/)
+```
+$ brew install pip
+$ pip install virtualenv
+$ cd path/to/auwebportal
+$ virtualenv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+$ python wsgi.py
+```
 
 ## How to consume?
 Send GET request to our endpoint, the Register Number and the Date of Birth of the student.
 
 ### Request
 ####GET:  
-http://auwebportal-savsr.rhcloud.com/get/?register_no=rno&dob=dob
+http://localhost:8080/get/?register_no=rno&dob=dob
 
 ### Response
 #### JSON:
@@ -390,6 +386,3 @@ http://auwebportal-savsr.rhcloud.com/get/?register_no=rno&dob=dob
     }
 }
 ```
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/arunvelsriram/auwebportal/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
